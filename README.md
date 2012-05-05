@@ -1,0 +1,4 @@
+DailyChecker
+============
+
+Android application
