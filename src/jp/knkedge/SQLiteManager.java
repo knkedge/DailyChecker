@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class SQLiteManager extends SQLiteOpenHelper {
 	static class Table {
@@ -66,12 +67,12 @@ public class SQLiteManager extends SQLiteOpenHelper {
 		return c;
 	}
 
-	private DailyWork.Pair getLastUpdated(int tid) {
+	private DailyWork.Record getLastUpdated(int tid) {
 		getDb();
-		String date = "";
 		Cursor c = db.query(Table.records, null, "tid="+tid, null, null, null, "_id DESC", "1");
 		if (c.moveToFirst()) {
-			DailyWork.Pair pair = new DailyWork.Pair();
+			DailyWork.Record pair = new DailyWork.Record();
+			pair._id = c.getInt(c.getColumnIndex("_id"));
 			pair.date = c.getString(c.getColumnIndex("date"));
 			pair.count = c.getInt(c.getColumnIndex("count"));
 			return pair;
@@ -97,15 +98,17 @@ public class SQLiteManager extends SQLiteOpenHelper {
 		getWritableDb();
 		Calendar today = Calendar.getInstance();
 		String date = today.get(Calendar.YEAR)+"/"+
-				(today.get(Calendar.MONTH)-1)+"/"+today.get(Calendar.DATE);
+				(today.get(Calendar.MONTH)+1)+"/"+today.get(Calendar.DATE);
 		/* 対象タスクの最終更新日調べる */
-		DailyWork.Pair p = getLastUpdated(tid);
-		if (p.date == date) {
+		DailyWork.Record p = getLastUpdated(tid);
+		Log.v("DailyChecker", p.date);
+		if (p != null && p.date.equals(date)) {
 			ContentValues cv = new ContentValues();
 			cv.put("count", ++p.count);
-			int rows = db.update(Table.records, cv, "tid="+tid, null);
+			int rows = db.update(Table.records, cv, "_id="+p._id, null);
 			if (rows == 1) return true;
 			else return false;
+		/* 対象タスクの更新がなければ新たに当日のレコードを追加 */
 		} else {
 			ContentValues cv = new ContentValues();
 			cv.put("tid", tid);

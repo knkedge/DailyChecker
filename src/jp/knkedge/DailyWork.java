@@ -2,6 +2,7 @@ package jp.knkedge;
 
 import java.util.Calendar;
 import android.database.Cursor;
+import android.util.Log;
 import jp.knkedge.SQLiteManager;
 
 public class DailyWork {
@@ -14,7 +15,8 @@ public class DailyWork {
 	private int continuingDay;
 	private static SQLiteManager sqliteManager;
 
-	static class Pair {
+	static class Record {
+		int _id;
 		String date;
 		int count;
 	}
@@ -51,6 +53,7 @@ public class DailyWork {
 				} else {
 					continueCount = 0;
 				}
+				Log.v("DailyChecker", this.exp+"/"+count+"/"+continueCount);
 				this.exp += count + continueCount;
 				/* update level */
 				if (this.exp >= getNeccessaryExp(this.level)) {
