@@ -19,8 +19,8 @@ public class DailyChecker_kaiActivity extends Activity {
 
         // View init
         ListView view = (ListView)this.findViewById(R.id.listView1);
-        int id = sqliteManager.addTask("test");
-        sqliteManager.addRecord(id);
+        // int id = sqliteManager.addTask("test");
+        sqliteManager.addRecord(1);
         ArrayList<DailyWork> list = sqliteManager.getAllTasks();
         // ArrayAdapter<DailyWork> adapter = new ArrayAdapter<DailyWork>(this, R.layout.listview, list);
         ListViewAdapter adapter = new ListViewAdapter(this, R.layout.listview, list);

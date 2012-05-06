@@ -14,6 +14,11 @@ public class DailyWork {
 	private int continuingDay;
 	private static SQLiteManager sqliteManager;
 
+	static class Pair {
+		String date;
+		int count;
+	}
+
 	/** コンストラクタ **/
 	public DailyWork (int id, String name) {
 		this.id = id;

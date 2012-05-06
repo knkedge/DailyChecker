@@ -66,6 +66,20 @@ public class SQLiteManager extends SQLiteOpenHelper {
 		return c;
 	}
 
+	private DailyWork.Pair getLastUpdated(int tid) {
+		getDb();
+		String date = "";
+		Cursor c = db.query(Table.records, null, "tid="+tid, null, null, null, "_id DESC", "1");
+		if (c.moveToFirst()) {
+			DailyWork.Pair pair = new DailyWork.Pair();
+			pair.date = c.getString(c.getColumnIndex("date"));
+			pair.count = c.getInt(c.getColumnIndex("count"));
+			return pair;
+		} else {
+			return null;
+		}
+	}
+
 	public int addTask(String name) {
 		getWritableDb();
 		ContentValues cv = new ContentValues();
@@ -84,13 +98,23 @@ public class SQLiteManager extends SQLiteOpenHelper {
 		Calendar today = Calendar.getInstance();
 		String date = today.get(Calendar.YEAR)+"/"+
 				(today.get(Calendar.MONTH)-1)+"/"+today.get(Calendar.DATE);
-		ContentValues cv = new ContentValues();
-		cv.put("tid", tid);
-		cv.put("date", date);
-		cv.put("count", 1);
-		int recid = (int)db.insert(Table.records, "", cv);
-		if (recid > 0) return true;
-		else return false;
+		/* 対象タスクの最終更新日調べる */
+		DailyWork.Pair p = getLastUpdated(tid);
+		if (p.date == date) {
+			ContentValues cv = new ContentValues();
+			cv.put("count", ++p.count);
+			int rows = db.update(Table.records, cv, "tid="+tid, null);
+			if (rows == 1) return true;
+			else return false;
+		} else {
+			ContentValues cv = new ContentValues();
+			cv.put("tid", tid);
+			cv.put("date", date);
+			cv.put("count", 1);
+			int recid = (int)db.insert(Table.records, "", cv);
+			if (recid > 0) return true;
+			else return false;
+		}
 	}
 
 	/**
