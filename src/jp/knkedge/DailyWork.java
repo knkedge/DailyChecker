@@ -41,7 +41,7 @@ public class DailyWork {
 		this.level = 0;
 		this.continuingDay = 0;
 		int continueCount = 0;
-		String befDate = "2000/0/1";
+		String befDate = "2000/1/1";
 
 		if (c.moveToFirst()) {
 			do {
