@@ -118,7 +118,9 @@ public class ListViewAdapter extends ArrayAdapter<DailyWork> implements OnClickL
 			// Toast.makeText(getContext(), "Pushed: "+id, Toast.LENGTH_LONG).show();
 			if (id > 0) {
 				sqliteManager.addRecord(id);
-				Toast.makeText(getContext(), "added!", Toast.LENGTH_LONG).show();
+				Toast.makeText(getContext(), "added", Toast.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(getContext(), "error!", Toast.LENGTH_LONG).show();
 			}
 			/*
 			Button b = (Button) view;
