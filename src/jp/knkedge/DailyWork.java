@@ -3,7 +3,6 @@ package jp.knkedge;
 import java.util.Calendar;
 import android.database.Cursor;
 import android.util.Log;
-import jp.knkedge.SQLiteManager;
 
 public class DailyWork {
 	// private static final SimpleDateFormat sdft = new SimpleDateFormat("yyyy/mm/dd");
@@ -56,8 +55,8 @@ public class DailyWork {
 				Log.v("DailyChecker", this.exp+"/"+count+"/"+continueCount);
 				this.exp += count + continueCount;
 				/* update level */
-				if (this.exp >= getNeccessaryExp(this.level)) {
-					this.exp = this.exp - getNeccessaryExp(this.level);
+				if (this.exp >= getNeccessaryExp(this.level+1)) {
+					this.exp = this.exp - getNeccessaryExp(this.level+1);
 					this.level++;	// level up!!
 				}
 				befDate = date;

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:daily="http://schemas.android.com/apk/res/jp.knkedge"
   android:orientation="horizontal"
   android:layout_width="match_parent"
   android:layout_height="match_parent" android:weightSum="1">
@@ -19,8 +20,8 @@
             	android:textAppearance="?android:attr/textAppearanceMedium" android:id="@+id/textLevel"
             	android:gravity="right" android:layout_width="69dp"></TextView>
         </LinearLayout>
-        <ProgressBar android:id="@+id/progressBar1" android:layout_height="wrap_content"
-        	style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent"></ProgressBar>
+        <jp.knkedge.BarView android:id="@+id/barview" android:layout_height="wrap_content"
+        	android:layout_width="match_parent"></jp.knkedge.BarView>
     </LinearLayout>
 
 </LinearLayout>

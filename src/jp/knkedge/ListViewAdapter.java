@@ -1,21 +1,19 @@
 package jp.knkedge;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import jp.knkedge.SQLiteManager;
+import jp.knkedge.R;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,13 +43,32 @@ public class ListViewAdapter extends ArrayAdapter<DailyWork> implements OnClickL
 //		this.list.add(work);
 //	}
 
+	private class ViewHandler extends Handler{
+		View retView;
+		public ViewHandler() {
+			super();
+		}
+		public View returnView (Message msg) {
+			this.handleMessage(msg);
+			return this.retView;
+		}
+		public void handleMessage (Message msg) {
+			if (msg.what == 1) {
+				this.retView = inflater.inflate(R.layout.listview, null);
+			}
+			super.handleMessage(msg);
+		}
+	}
+
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO 自動生成されたメソッド・スタブ
 		DailyWork work = (DailyWork)getItem(position);
 		ViewHolder holder;
 		if (convertView == null) {
-			convertView = inflater.inflate(R.layout.listview, null);
-
+			// convertView = inflater.inflate(R.layout.listview, null);
+			// TODO inflater.inflate はハンドラでしか使えない
+			ViewHandler handle = new ViewHandler();
+			convertView = handle.returnView(handle.obtainMessage(1));
 			holder = new ViewHolder();
 			holder.button = (Button) convertView.findViewById(R.id.imageButton1);
 			// update clicklistener initialize
@@ -59,7 +76,8 @@ public class ListViewAdapter extends ArrayAdapter<DailyWork> implements OnClickL
 			holder.dayView = (TextView) convertView.findViewById(R.id.textDay);
 			holder.expView = (TextView) convertView.findViewById(R.id.textExp);
 			holder.levelView = (TextView) convertView.findViewById(R.id.textLevel);
-			holder.expBar = (ProgressBar) convertView.findViewById(R.id.progressBar1);
+			holder.expBar = (BarView)convertView.findViewById(R.id.barview);
+			Log.v("DailyChecker", holder.expBar.toString());
 
 			convertView.setTag(holder);
 		} else {
@@ -71,8 +89,10 @@ public class ListViewAdapter extends ArrayAdapter<DailyWork> implements OnClickL
 		holder.button.setText(work.getName());
 		// holder.expView.setText(""+work.getExp());
 		holder.levelView.setText("Lv "+work.getLevel());
-		holder.expBar.setMax(DailyWork.getNeccessaryExp(work.getLevel()+1));
-		holder.expBar.setProgress(work.getExp());
+		holder.expBar.setItem(work);
+
+		// holder.expBar.setMax(DailyWork.getNeccessaryExp(work.getLevel()+1));
+		// holder.expBar.setProgress(work.getExp());
 
 		return convertView;
 	}
@@ -82,7 +102,7 @@ public class ListViewAdapter extends ArrayAdapter<DailyWork> implements OnClickL
 		TextView dayView;
 		TextView expView;
 		TextView levelView;
-		ProgressBar expBar;
+		BarView expBar;
 	}
 
 	public void onClick(View view) {
