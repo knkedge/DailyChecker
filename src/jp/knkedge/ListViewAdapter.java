@@ -115,7 +115,11 @@ public class ListViewAdapter extends ArrayAdapter<DailyWork> implements OnClickL
 			// タスクのアップデート処理
 			Button b = (Button)view;
 			int id = sqliteManager.getTaskId(b.getText().toString());
-			Toast.makeText(getContext(), "Pushed: "+id, Toast.LENGTH_LONG).show();
+			// Toast.makeText(getContext(), "Pushed: "+id, Toast.LENGTH_LONG).show();
+			if (id > 0) {
+				sqliteManager.addRecord(id);
+				Toast.makeText(getContext(), "added!", Toast.LENGTH_LONG).show();
+			}
 			/*
 			Button b = (Button) view;
 			String taskName = b.getText().toString();

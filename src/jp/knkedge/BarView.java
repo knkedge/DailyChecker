@@ -33,10 +33,12 @@ public class BarView extends View {
 		float tBottom = (float)mBottom-mTop-5;
 		// CanvasへのDrawは、"Canvas内での座標"で指定する
 		canvas.drawRoundRect(new RectF(tLeft, tTop, tRight, tBottom), 2f, 2f, p);
-		float perRight = tLeft + (tRight-tLeft) * perExp();
-		Paint perp = new Paint();
-		perp.setColor(Color.YELLOW);
-		canvas.drawRoundRect(new RectF(tLeft, tTop, perRight, tBottom), 2f, 2f, perp);
+		if (work != null && work.getExp() > 0) {
+			float perRight = tLeft + (tRight-tLeft) * perExp();
+			Paint perp = new Paint();
+			perp.setColor(Color.YELLOW);
+			canvas.drawRoundRect(new RectF(tLeft, tTop, perRight, tBottom), 2f, 2f, perp);
+		}
 	}
 
 	private float perExp() {
