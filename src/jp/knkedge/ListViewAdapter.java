@@ -24,7 +24,7 @@ public class ListViewAdapter extends ArrayAdapter<DailyWork> implements OnClickL
 
 	// private Context context = null;
 	private LayoutInflater inflater = null;
-	// private SQLiteManager sqliteManager = null;
+	private SQLiteManager sqliteManager = null;
 
 	public ListViewAdapter (Context context, int listview, ArrayList<DailyWork> items) {
 		super(context, listview, items);
@@ -69,9 +69,10 @@ public class ListViewAdapter extends ArrayAdapter<DailyWork> implements OnClickL
 		// 値設定
 		holder.dayView.setText(work.getContinuingDay()+"日");
 		holder.button.setText(work.getName());
-		holder.expView.setText(""+work.getExp());
+		// holder.expView.setText(""+work.getExp());
 		holder.levelView.setText("Lv "+work.getLevel());
-		holder.expBar.setProgress(work.getExp()-DailyWork.getNeccessaryExp(work.getLevel()));
+		holder.expBar.setMax(DailyWork.getNeccessaryExp(work.getLevel()+1));
+		holder.expBar.setProgress(work.getExp());
 
 		return convertView;
 	}
@@ -88,11 +89,14 @@ public class ListViewAdapter extends ArrayAdapter<DailyWork> implements OnClickL
 		// TODO 自動生成されたメソッド・スタブ
 		// ボタンが押されたとき
 		if (view.getId() == R.id.imageButton1) {
-			Toast.makeText(getContext(), "Pushed", Toast.LENGTH_LONG).show();
-			/*
 			if (sqliteManager == null) {
 				sqliteManager = new SQLiteManager(getContext());
 			}
+			// タスクのアップデート処理
+			Button b = (Button)view;
+			int id = sqliteManager.getTaskId(b.getText().toString());
+			Toast.makeText(getContext(), "Pushed: "+id, Toast.LENGTH_LONG).show();
+			/*
 			Button b = (Button) view;
 			String taskName = b.getText().toString();
 			DailyWork work = sqliteManager.getDailyWork(taskName);

@@ -101,7 +101,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
 				(today.get(Calendar.MONTH)+1)+"/"+today.get(Calendar.DATE);
 		/* 対象タスクの最終更新日調べる */
 		DailyWork.Record p = getLastUpdated(tid);
-		Log.v("DailyChecker", p.date);
+		if (p != null) Log.v("DailyChecker", p.date);
 		if (p != null && p.date.equals(date)) {
 			ContentValues cv = new ContentValues();
 			cv.put("count", ++p.count);
@@ -118,6 +118,19 @@ public class SQLiteManager extends SQLiteOpenHelper {
 			if (recid > 0) return true;
 			else return false;
 		}
+	}
+
+	public int getTaskId(String name) {
+		// NameからIDを調べて返す
+		getDb();
+		Cursor c = db.query(Table.task, new String[]{"_id"}, "name=?", new String[]{name}, null, null, null);
+		if (c.moveToFirst()) {
+			int id = c.getInt(c.getColumnIndex("_id"));
+			if (id > 0) {
+				return id;
+			}
+		}
+		return -1;
 	}
 
 	/**
