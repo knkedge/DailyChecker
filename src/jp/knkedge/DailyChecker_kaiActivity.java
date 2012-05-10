@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 public class DailyChecker_kaiActivity extends Activity {
 	SQLiteManager sqliteManager;
+	ListView view;
 	private static final int MENU_CREATE = (Menu.FIRST+1);
     /** Called when the activity is first created. */
     @Override
@@ -21,12 +22,24 @@ public class DailyChecker_kaiActivity extends Activity {
         sqliteManager = new SQLiteManager(this);
 
         // View init
-        ListView view = (ListView)this.findViewById(R.id.listView1);
-        // test
+        view = (ListView)this.findViewById(R.id.listView1);
         ArrayList<DailyWork> list = sqliteManager.getAllTasks();
-        // ArrayAdapter<DailyWork> adapter = new ArrayAdapter<DailyWork>(this, R.layout.listview, list);
         ListViewAdapter adapter = new ListViewAdapter(this, R.layout.listview, list);
         view.setAdapter(adapter);
+    }
+
+    @Override
+    public void onResume() {
+    	if (sqliteManager == null) {
+    		sqliteManager = new SQLiteManager(this);
+    	}
+    	if (view == null) {
+    		view = (ListView)this.findViewById(R.id.listView1);
+    	}
+    	ArrayList<DailyWork> list = sqliteManager.getAllTasks();
+        ListViewAdapter adapter = new ListViewAdapter(this, R.layout.listview, list);
+        view.setAdapter(adapter);
+    	super.onResume();
     }
 
     @Override
@@ -43,5 +56,12 @@ public class DailyChecker_kaiActivity extends Activity {
     		return true;
     	}
     	return false;
+    }
+
+    @Override
+    public void onDestroy() {
+    	sqliteManager = null;
+    	view = null;
+    	super.onDestroy();
     }
 }
