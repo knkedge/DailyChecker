@@ -130,6 +130,23 @@ public class DailyWork {
 		return this.prevDate;
 	}
 
+	public boolean pushedToday () {
+		if (this.prevDate == null) {
+			return false;
+		}
+		String[] prev = this.prevDate.split("/");
+		if (prev.length < 3) {
+			return false;
+		}
+		Calendar today = Calendar.getInstance();
+		if (today.get(Calendar.YEAR) == Integer.parseInt(prev[0])
+				&& (today.get(Calendar.MONTH)+1) == Integer.parseInt(prev[1])
+				&& today.get(Calendar.DATE) == Integer.parseInt(prev[2])) {
+			return true;
+		}
+		return false;
+	}
+
 //	public void update () {
 //		int plusValue = 1;
 //		/* 前回の更新日取得 */

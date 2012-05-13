@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import jp.knkedge.R;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -86,6 +87,11 @@ public class ListViewAdapter extends ArrayAdapter<DailyWork> implements OnClickL
 
 		// 値設定
 		holder.dayView.setText(work.getContinuingDay()+"日");
+		if (work.pushedToday()) {
+			holder.dayView.setTextColor(Color.GREEN);
+		} else {
+			holder.dayView.setTextColor(Color.WHITE);
+		}
 		holder.button.setText(work.getName());
 		// holder.expView.setText(""+work.getExp());
 		holder.levelView.setText("Lv "+work.getLevel());
